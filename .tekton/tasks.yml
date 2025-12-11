@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup-task
+spec:
+  steps:
+    - name: cleanup
+      image: ubuntu
+      script: |
+        #!/bin/bash
+        echo "Cleaning workspace..."
+        rm -rf /workspace/*
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: nose-test-task
+spec:
+  steps:
+    - name: run-tests
+      image: python:3.9
+      script: |
+        #!/bin/bash
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install nose
+        nosetests tests/
